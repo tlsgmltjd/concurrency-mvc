@@ -15,7 +15,7 @@ class TicketService(
 ) {
 
     @Transactional
-    fun issue(userId: Long, ticketId: Long) {
+    fun issueWithoutLock(userId: Long, ticketId: Long) {
         val user = userRepository.findById(userId)
             .orElseThrow { RuntimeException() }
 
