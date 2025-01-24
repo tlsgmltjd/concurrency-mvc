@@ -18,7 +18,7 @@ class TicketController(
         @RequestParam("userId") userId: Long,
         @RequestParam("ticketId") ticketId: Long
     ): ResponseEntity<Void> {
-        ticketService.issueWithoutLock(userId, ticketId)
+        ticketService.issueWithLock(userId, ticketId)
         return ResponseEntity.ok().build()
     }
 

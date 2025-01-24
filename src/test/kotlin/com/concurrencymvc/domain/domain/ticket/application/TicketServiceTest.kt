@@ -38,4 +38,29 @@ class TicketServiceTest @Autowired constructor(
   // 실제: {result: count = 33, ticketUserCount = 300}
   println("result: count = $ticketCount, ticketUserCount = $ticketUserCount")
  }
+
+ @Test
+ fun testWithLock() {
+  val threadCount = 300
+  val executorService = Executors.newFixedThreadPool(threadCount)
+
+  repeat(threadCount) {
+   executorService.submit {
+    ticketService.issueWithLock(1, 1)
+   }
+  }
+
+  executorService.shutdown()
+  while (!executorService.isTerminated) {
+   Thread.sleep(100)
+  }
+
+  val ticketCount = ticketRepository.findById(1).get().count
+  val ticketUserCount = ticketUserRepository.count()
+
+  // 기대: {result: count = 300, ticketUserCount = 300}
+  // 실제: {result: count = 300, ticketUserCount = 300}
+  println("result: count = $ticketCount, ticketUserCount = $ticketUserCount")
+ }
+
 }
