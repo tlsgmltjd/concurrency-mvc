@@ -29,12 +29,11 @@ class DistributedLockAop(
         val method = signature.method
         val distributedLock = method.getAnnotation(DistributedLock::class.java)
 
-//        val key = REDISSON_LOCK_PREFIX + DistributedLockKeyGenerator.generate(
-//            parameterNames = signature.parameterNames,
-//            args = joinPoint.args,
-//            key = distributedLock.key
-//        )
-        val key = REDISSON_LOCK_PREFIX + distributedLock.key
+        val key = REDISSON_LOCK_PREFIX + DistributedLockKeyGenerator.generate(
+            parameterNames = signature.parameterNames,
+            args = joinPoint.args,
+            key = distributedLock.key
+        )
         log.info("lock on method: $method key: $key", method, key)
 
         val rLock = redissonClient.getLock(key)

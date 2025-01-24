@@ -30,7 +30,7 @@ class TicketService(
         ticketUserRepository.save(ticketUser)
     }
 
-    @DistributedLock(key = "ticket_issue")
+    @DistributedLock(key = "'ticket_issue_' + #ticketId")
     @Transactional
     fun issueWithLock(userId: Long, ticketId: Long) {
         val user = userRepository.findById(userId)
